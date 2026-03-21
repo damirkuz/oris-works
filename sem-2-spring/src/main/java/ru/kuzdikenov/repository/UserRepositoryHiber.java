@@ -1,6 +1,7 @@
 package ru.kuzdikenov.repository;
 
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import ru.kuzdikenov.model.User;
 
@@ -11,7 +12,7 @@ public class UserRepositoryHiber {
 
     private final SessionFactory sessionFactory;
 
-    public UserRepositoryHiber(SessionFactory sessionFactory) {
+    public UserRepositoryHiber(@Qualifier("sessionFactory") SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 

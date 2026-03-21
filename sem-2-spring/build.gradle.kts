@@ -40,8 +40,11 @@ dependencies {
     implementation("org.springframework.security:spring-security-config:${springSecurityVersion}")
     implementation("org.springframework.security:spring-security-taglibs:${springSecurityVersion}")
     implementation("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
+
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
     annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+
 //    testImplementation(platform("org.junit:junit-bom:5.10.0"))
 //    testImplementation("org.junit.jupiter:junit-jupiter")
 }

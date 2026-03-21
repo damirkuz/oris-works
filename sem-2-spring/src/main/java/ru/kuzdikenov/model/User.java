@@ -12,6 +12,7 @@ import java.util.List;
 @Builder
 @Setter
 @ToString
+@EqualsAndHashCode
 @Table(name = "users")
 public class User {
     @Id
