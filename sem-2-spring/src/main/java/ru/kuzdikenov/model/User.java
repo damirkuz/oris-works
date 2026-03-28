@@ -19,10 +19,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
+    @Column
     private String password;
+
+    @Column(nullable = false, unique = true)
+    private String mail;
+
+    @Column
+    private String verificationCode;
+
+    @Column(nullable = false)
+    private boolean verified;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

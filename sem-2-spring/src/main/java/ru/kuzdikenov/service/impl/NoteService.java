@@ -1,4 +1,4 @@
-package ru.kuzdikenov.service;
+package ru.kuzdikenov.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

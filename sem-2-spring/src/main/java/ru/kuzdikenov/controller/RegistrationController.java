@@ -6,15 +6,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.kuzdikenov.service.UserService;
+import ru.kuzdikenov.service.impl.UserServiceImpl;
 
 @Controller
 @RequestMapping("/register")
 public class RegistrationController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    public RegistrationController(UserService userService) {
+    public RegistrationController(UserServiceImpl userService) {
         this.userService = userService;
     }
 

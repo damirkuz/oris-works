@@ -18,4 +18,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void deleteByUsername(String username);
 
 
+    Optional<User> findByVerificationCode(String verificationCode);
 }

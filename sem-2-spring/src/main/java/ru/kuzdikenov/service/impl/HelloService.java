@@ -1,4 +1,4 @@
-package ru.kuzdikenov.service;
+package ru.kuzdikenov.service.impl;
 
 import org.springframework.stereotype.Service;
 

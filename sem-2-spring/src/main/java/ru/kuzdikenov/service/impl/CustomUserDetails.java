@@ -1,4 +1,4 @@
-package ru.kuzdikenov.service;
+package ru.kuzdikenov.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

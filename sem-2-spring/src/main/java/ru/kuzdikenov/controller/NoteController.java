@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kuzdikenov.dto.NoteForm;
 import ru.kuzdikenov.model.Note;
-import ru.kuzdikenov.service.NoteService;
+import ru.kuzdikenov.service.impl.NoteService;
 
 import java.security.Principal;
 import java.util.List;
