@@ -1,0 +1,176 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="damirkuzdikenov (generated)" id="1775292352181-1">
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" startWith="7" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="users_pkey"/>
+            </column>
+            <column name="login" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password_hash" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_role" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="now()" name="created_at" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="profile_picture_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="damirkuzdikenov (generated)" id="1775292352181-2">
+        <createTable tableName="image">
+            <column defaultValueComputed="gen_random_uuid()" name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="image_pkey"/>
+            </column>
+            <column defaultValueNumeric="0" name="uploader_user_id" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="path" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="now()" name="created_at" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="damirkuzdikenov (generated)" id="1775292352181-3">
+        <createTable tableName="initiative">
+            <column autoIncrement="true" name="id" startWith="16" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="initiative_pkey"/>
+            </column>
+            <column defaultValueNumeric="0" name="creator_user_id" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="body" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="now()" name="created_at" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="damirkuzdikenov (generated)" id="1775292352181-4">
+        <createTable tableName="likes">
+            <column autoIncrement="true" name="id" startWith="17" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="likes_pkey"/>
+            </column>
+            <column name="user_id" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="initiative_id" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="damirkuzdikenov (generated)" id="1775292352181-5">
+        <createTable tableName="comment">
+            <column autoIncrement="true" name="id" startWith="18" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="comment_pkey"/>
+            </column>
+            <column defaultValueNumeric="0" name="author_user_id" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="initiative_id" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="body" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="now()" name="created_at" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="damirkuzdikenov (generated)" id="1775292352181-6">
+        <addUniqueConstraint columnNames="login" constraintName="users_login_key" tableName="users"/>
+    </changeSet>
+    <changeSet author="damirkuzdikenov (generated)" id="1775292352181-7">
+        <addUniqueConstraint columnNames="user_id, initiative_id" constraintName="uq_like_user_initiative"
+                             tableName="likes"/>
+    </changeSet>
+    <changeSet author="damirkuzdikenov (generated)" id="1775292352181-8">
+        <createTable tableName="image_initiative">
+            <column name="image_id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="image_initiative_pkey"/>
+            </column>
+            <column name="initiative_id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="image_initiative_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="damirkuzdikenov (generated)" id="1775292352181-9">
+        <addForeignKeyConstraint baseColumnNames="author_user_id" baseTableName="comment"
+                                 constraintName="comment_author_user_id_fkey" deferrable="false"
+                                 initiallyDeferred="false" onDelete="SET DEFAULT" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"
+                                 referencedTableSchemaName="forum" validate="true"/>
+    </changeSet>
+    <changeSet author="damirkuzdikenov (generated)" id="1775292352181-10">
+        <addForeignKeyConstraint baseColumnNames="initiative_id" baseTableName="comment"
+                                 constraintName="comment_initiative_id_fkey" deferrable="false"
+                                 initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="initiative"
+                                 referencedTableSchemaName="forum" validate="true"/>
+    </changeSet>
+    <changeSet author="damirkuzdikenov (generated)" id="1775292352181-11">
+        <addForeignKeyConstraint baseColumnNames="profile_picture_id" baseTableName="users"
+                                 constraintName="fk_users_profile_picture" deferrable="false" initiallyDeferred="false"
+                                 onDelete="SET NULL" onUpdate="NO ACTION" referencedColumnNames="id"
+                                 referencedTableName="image" referencedTableSchemaName="forum" validate="true"/>
+    </changeSet>
+    <changeSet author="damirkuzdikenov (generated)" id="1775292352181-12">
+        <addForeignKeyConstraint baseColumnNames="image_id" baseTableName="image_initiative"
+                                 constraintName="image_initiative_image_id_fkey" deferrable="false"
+                                 initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="image"
+                                 referencedTableSchemaName="forum" validate="true"/>
+    </changeSet>
+    <changeSet author="damirkuzdikenov (generated)" id="1775292352181-13">
+        <addForeignKeyConstraint baseColumnNames="initiative_id" baseTableName="image_initiative"
+                                 constraintName="image_initiative_initiative_id_fkey" deferrable="false"
+                                 initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="initiative"
+                                 referencedTableSchemaName="forum" validate="true"/>
+    </changeSet>
+    <changeSet author="damirkuzdikenov (generated)" id="1775292352181-14">
+        <addForeignKeyConstraint baseColumnNames="uploader_user_id" baseTableName="image"
+                                 constraintName="image_uploader_user_id_fkey" deferrable="false"
+                                 initiallyDeferred="false" onDelete="SET DEFAULT" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"
+                                 referencedTableSchemaName="forum" validate="true"/>
+    </changeSet>
+    <changeSet author="damirkuzdikenov (generated)" id="1775292352181-15">
+        <addForeignKeyConstraint baseColumnNames="creator_user_id" baseTableName="initiative"
+                                 constraintName="initiative_creator_user_id_fkey" deferrable="false"
+                                 initiallyDeferred="false" onDelete="SET DEFAULT" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"
+                                 referencedTableSchemaName="forum" validate="true"/>
+    </changeSet>
+    <changeSet author="damirkuzdikenov (generated)" id="1775292352181-16">
+        <addForeignKeyConstraint baseColumnNames="initiative_id" baseTableName="likes"
+                                 constraintName="likes_initiative_id_fkey" deferrable="false" initiallyDeferred="false"
+                                 onDelete="CASCADE" onUpdate="NO ACTION" referencedColumnNames="id"
+                                 referencedTableName="initiative" referencedTableSchemaName="forum" validate="true"/>
+    </changeSet>
+    <changeSet author="damirkuzdikenov (generated)" id="1775292352181-17">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="likes" constraintName="likes_user_id_fkey"
+                                 deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"
+                                 referencedTableSchemaName="forum" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
