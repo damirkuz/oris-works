@@ -7,16 +7,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kuzdikenov.dto.CreateUserDto;
+import ru.kuzdikenov.dto.UserDto;
 import ru.kuzdikenov.model.User;
-import ru.kuzdikenov.service.impl.UserServiceImpl;
+import ru.kuzdikenov.service.UserService;
+
+import java.util.List;
 
 
 @RestController
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    public UserController(UserServiceImpl userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -29,7 +32,12 @@ public class UserController {
     public void addUser(@RequestBody CreateUserDto createUserDto) {
         userService.createUser(createUserDto);
     }
-//
+
+    @GetMapping("/users")
+    public List<UserDto> getUsers() {
+        return userService.getUsers();
+    }
+
 //    @DeleteMapping("/user")
 //    public void deleteUser(@RequestBody CreateUserDto userWithUsernameDto) {
 //        userService.deleteUser(userWithUsernameDto);

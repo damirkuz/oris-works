@@ -6,6 +6,7 @@ plugins {
     id("org.springframework.boot") version "3.4.4"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.liquibase.gradle") version "2.2.2"
+    id("jacoco")
 }
 
 group = "ru.kuzdikenov"
@@ -45,6 +46,11 @@ dependencies {
     liquibaseRuntime("org.liquibase:liquibase-core:4.33.0")
     liquibaseRuntime("info.picocli:picocli:4.6.3")
     liquibaseRuntime("org.postgresql:postgresql:${postgresVersion}")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.security:spring-security-test")
+
+
 }
 
 
@@ -52,9 +58,6 @@ dependencies {
 //    mainClass = "ru.kuzdikenov.Main"
 //}
 
-tasks.test {
-    useJUnitPlatform()
-}
 
 val props = Properties()
 props.load(file("src/main/resources/db/liquibase.properties").inputStream())
@@ -70,5 +73,33 @@ liquibase {
             "defaultSchemaName" to props.getProperty("defaultSchemaName"),
             "schemas" to props.getProperty("defaultSchemaName")
         )
+    }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required.set(false)
+        csv.required.set(false)
+        html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+    reportsDirectory.set(layout.buildDirectory.dir("jacoco"))
+}
+
+tasks.jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = BigDecimal.valueOf(0.5)
+            }
+        }
     }
 }

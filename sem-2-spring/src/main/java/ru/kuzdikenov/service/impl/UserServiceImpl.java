@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kuzdikenov.config.properties.MailProperties;
 import ru.kuzdikenov.dto.CreateUserDto;
+import ru.kuzdikenov.dto.UserDto;
 import ru.kuzdikenov.model.Role;
 import ru.kuzdikenov.model.User;
 import ru.kuzdikenov.repository.RoleRepository;
@@ -90,6 +91,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User getUser(CreateUserDto createUserDto) {
         return userRepository.findByUsername(createUserDto.username()).get();
+    }
+
+    @Override
+    public List<UserDto> getUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(user -> new UserDto(user.getUsername())).toList();
     }
 //
 //    @Transactional
