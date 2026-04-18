@@ -18,7 +18,7 @@ public class SecurityConfig {
         return httpSecurity
                 .authorizeHttpRequests(a -> a
                         .requestMatchers("/index", "/css/**", "/js/**", "/favicon.ico").permitAll()
-                        .requestMatchers("/register", "/user", "/notes/public/**", "/verification", "/error").permitAll()
+                        .requestMatchers("/register", "/user", "/notes/public/**", "/verification", "/error", "/metrics", "/benchmarks/**").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/hello", "/notes/**").hasAnyAuthority("USER", "ADMIN")
                         .anyRequest().authenticated()

@@ -1,24 +1,21 @@
 package ru.kuzdikenov.aop;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 
 @Aspect
 @Component
+@Slf4j
 public class LoggingAspect {
-
-    public static final Logger LOGGER = LoggerFactory.getLogger(LoggingAspect.class);
-
-    @Pointcut("execution(* ru.kuzdikenov..*.*(..)) && !within(ru.kuzdikenov.dto..*) && !within(ru.kuzdikenov.config..*)")
-    public void logExecution() {
-    }
+//    @Pointcut("execution(* ru.kuzdikenov..*.*(..)) && !within(ru.kuzdikenov.dto..*) && !within(ru.kuzdikenov.config..*)")
+//    public void logExecution() {
+//    }
 
     @Pointcut("@annotation(Loggable)")
     public void logAnnotated() {
@@ -26,11 +23,11 @@ public class LoggingAspect {
 
     @Around("logAnnotated()")
     public Object log(ProceedingJoinPoint joinPoint) throws Throwable {
-        LOGGER.debug("Entering log execution");
+        log.debug("Entering log execution");
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         String className = signature.getDeclaringType().getSimpleName();
         String methodName = signature.getName();
-        LOGGER.info("Start execution {}.{}", className, methodName);
+        log.info("Start execution {}.{}", className, methodName);
         Object result;
         try {
             result = joinPoint.proceed();
@@ -38,7 +35,7 @@ public class LoggingAspect {
             throw new RuntimeException(throwable);
         }
 
-        LOGGER.info("Finish executing {}.{}", className, methodName);
+        log.info("Finish executing {}.{}", className, methodName);
         return result;
     }
 }

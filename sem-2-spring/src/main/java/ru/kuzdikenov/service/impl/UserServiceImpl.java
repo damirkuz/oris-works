@@ -10,6 +10,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kuzdikenov.aop.Benchmarkable;
+import ru.kuzdikenov.aop.Metricable;
 import ru.kuzdikenov.config.properties.MailProperties;
 import ru.kuzdikenov.dto.CreateUserDto;
 import ru.kuzdikenov.dto.UserDto;
@@ -35,6 +37,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @Metricable
+    @Benchmarkable
     public void createUser(CreateUserDto createUserDto) {
         if (userRepository.findByUsername(createUserDto.username()).isPresent()) {
             throw new IllegalArgumentException("Пользователь с таким именем уже существует");
