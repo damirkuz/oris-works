@@ -6,15 +6,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.kuzdikenov.service.impl.UserServiceImpl;
+import ru.kuzdikenov.dto.CreateUserDto;
+import ru.kuzdikenov.service.UserService;
 
 @Controller
 @RequestMapping("/register")
 public class RegistrationController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    public RegistrationController(UserServiceImpl userService) {
+    public RegistrationController(UserService userService) {
         this.userService = userService;
     }
 
@@ -27,13 +28,15 @@ public class RegistrationController {
     public String registerUser(
             @RequestParam(name = "username") String username,
             @RequestParam(name = "password") String password,
+            @RequestParam(name = "mail") String mail,
             Model model
     ) {
         try {
-            userService.registerNewUser(username, password);
+            userService.createUser(new CreateUserDto(username, password, mail));
             return "redirect:/login";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", true);
+            model.addAttribute("errorMessage", e.getMessage());
             return "register";
         }
     }

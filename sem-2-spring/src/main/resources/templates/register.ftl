@@ -8,13 +8,17 @@
 <h2>Регистрация нового пользователя</h2>
 
 <#if error??>
-    <p style="color: red;">Ошибка при регистрации. Возможно, имя пользователя уже занято.</p>
+    <p style="color: red;">${errorMessage!'Ошибка при регистрации.'}</p>
 </#if>
 
 <form action="/register" method="post">
     <div>
         <label for="username">Логин:</label>
         <input type="text" id="username" name="username" required/>
+    </div>
+    <div>
+        <label for="mail">Почта:</label>
+        <input type="email" id="mail" name="mail" required/>
     </div>
     <div>
         <label for="password">Пароль:</label>

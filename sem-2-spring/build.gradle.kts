@@ -32,6 +32,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.postgresql:postgresql:${postgresVersion}")
     implementation("org.springframework.boot:spring-boot-starter-freemarker")
     implementation("org.springframework.boot:spring-boot-starter-mail")
@@ -60,19 +61,35 @@ dependencies {
 
 
 val props = Properties()
-props.load(file("src/main/resources/db/liquibase.properties").inputStream())
+file("src/main/resources/db/liquibase.properties").reader(Charsets.UTF_8).use(props::load)
+
+val envProps = Properties()
+val envFile = file(".env")
+if (envFile.exists()) {
+    envFile.reader(Charsets.UTF_8).use(envProps::load)
+}
+
+fun resolveLiquibaseProperty(propertyKey: String, envKey: String): String? {
+    return envProps.getProperty(envKey)
+        ?: System.getenv(envKey)
+        ?: props.getProperty(propertyKey)?.takeIf { it.isNotBlank() }
+}
 
 liquibase {
     activities.register("generate") {
-        arguments = mapOf(
+        val defaultSchemaName = resolveLiquibaseProperty("defaultSchemaName", "LIQUIBASE_SCHEMA")
+        val liquibaseArguments = mutableMapOf<String, Any>(
             "changelogFile" to props.getProperty("change-log-file"),
-            "url" to props.getProperty("url"),
-            "username" to props.getProperty("username"),
-            "password" to props.getProperty("password"),
-            "driver" to props.getProperty("driver"),
-            "defaultSchemaName" to props.getProperty("defaultSchemaName"),
-            "schemas" to props.getProperty("defaultSchemaName")
+            "driver" to props.getProperty("driver")
         )
+        resolveLiquibaseProperty("url", "LIQUIBASE_URL")?.let { liquibaseArguments["url"] = it }
+        resolveLiquibaseProperty("username", "LIQUIBASE_USERNAME")?.let { liquibaseArguments["username"] = it }
+        resolveLiquibaseProperty("password", "LIQUIBASE_PASSWORD")?.let { liquibaseArguments["password"] = it }
+        defaultSchemaName?.let {
+            liquibaseArguments["defaultSchemaName"] = it
+            liquibaseArguments["schemas"] = it
+        }
+        arguments = liquibaseArguments
     }
 }
 

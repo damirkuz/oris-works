@@ -3,10 +3,13 @@ server:
 
 
 spring:
+  config:
+    import: optional:file:.env[.properties]
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: postgres
+    url: "${APP_DB_URL:jdbc:postgresql://localhost:5432/postgres}"
+    username: "${APP_DB_USERNAME:postgres}"
+    password: "${APP_DB_PASSWORD:postgres}"
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -17,17 +20,17 @@ spring:
 
   liquibase:
     enabled: true
-    change-log: classpath:/db/changelog/db-changelog.xml
+    change-log: db/changelog/db-changelog.xml
 
   freemarker:
     enabled: true
     suffix: .ftl
 
   mail:
-    host: smtp.gmail.com
-    port: 465
-    username: "пупупу@gmail.com"
-    password: "пароль пароль"
+    host: "${APP_MAIL_HOST:smtp.gmail.com}"
+    port: "${APP_MAIL_PORT:465}"
+    username: "${APP_MAIL_USERNAME:}"
+    password: "${APP_MAIL_PASSWORD:}"
     properties:
       mail:
         smtp:
@@ -40,9 +43,9 @@ spring:
 
 
 mail:
-  sender: Test Application
-  from: ${spring.mail.username}
-  subject: "Please read me that's not a virus really bro"
-  content: "Dear $name, please verify your mail: <a href=$url>VERIFY</a>"
-  base-url: http://localhost:8080
-
+  sender: "${APP_MAIL_SENDER:Test Application}"
+  from: "${APP_MAIL_FROM:${spring.mail.username}}"
+  subject: "${APP_MAIL_SUBJECT:Please read me that's not a virus really bro}"
+  content: "${APP_MAIL_CONTENT:Dear $name, please verify your mail: <a href=$url>VERIFY</a>}"
+  base-url: "${APP_BASE_URL:http://localhost:8080}"
+  verification-enabled: "${MAIL_VERIFICATION_ENABLED:false}"

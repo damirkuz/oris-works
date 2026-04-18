@@ -9,6 +9,7 @@ public record MailProperties(
         String from,
         String subject,
         String content,
-        String baseUrl
+        String baseUrl,
+        boolean verificationEnabled
 ) {
 }
